@@ -669,6 +669,9 @@ public class Quester {
 	}
 
 	public boolean hasCustomObjective(Quest quest, String s) {
+		if (getQuestData(quest) == null) {
+			return false;
+		}
 		if (getQuestData(quest).customObjectiveCounts.containsKey(s)) {
 			int count = getQuestData(quest).customObjectiveCounts.get(s);
 			int index = -1;
@@ -875,19 +878,6 @@ public class Quester {
 	}
 
 	public void killPlayer(Quest quest, Player player) {
-		if (getQuestData(quest).playerKillTimes.containsKey(player.getUniqueId())) {
-			long killTime = getQuestData(quest).playerKillTimes.get(player.getUniqueId());
-			long comparator = plugin.killDelay * 1000;
-			long currentTime = System.currentTimeMillis();
-			if ((currentTime - killTime) < comparator) {
-				String error = Lang.get("killNotValid");
-				error = error.replaceAll("<time>", ChatColor.DARK_PURPLE + Quests.getTime(comparator - (currentTime - killTime)) + ChatColor.RED);
-				error = error.replaceAll("<player>", ChatColor.DARK_PURPLE + player.getName() + ChatColor.RED);
-				getPlayer().sendMessage(ChatColor.RED + error);
-				return;
-			}
-		}
-		getQuestData(quest).playerKillTimes.put(player.getUniqueId(), System.currentTimeMillis());
 		if (getQuestData(quest).getPlayersKilled() < getCurrentStage(quest).playersToKill) {
 			getQuestData(quest).setPlayersKilled(getQuestData(quest).getPlayersKilled() + 1);
 			if (((Integer) getQuestData(quest).getPlayersKilled()).equals(getCurrentStage(quest).playersToKill)) {
@@ -897,11 +887,19 @@ public class Quester {
 	}
 
 	public void interactWithNPC(Quest quest, NPC n) {
-		if (getQuestData(quest).citizensInteracted.containsKey(n.getId())) {
-			if (getQuestData(quest).citizensInteracted.get(n.getId()) == false) {
-				getQuestData(quest).citizensInteracted.put(n.getId(), true);
-				finishObjective(quest, "talkToNPC", null, null, null, null, null, n, null, null, null, null);
+		try {
+			if (getQuestData(quest).citizensInteracted.containsKey(n.getId())) {
+				if (getQuestData(quest).citizensInteracted.get(n.getId()) == false) {
+					getQuestData(quest).citizensInteracted.put(n.getId(), true);
+					finishObjective(quest, "talkToNPC", null, null, null, null, null, n, null, null, null, null);
+				}
 			}
+		} catch (NullPointerException e) {
+			//Github ticket #155
+			plugin.getLogger().severe("An error has occurred with Quests. Please report on Github. Include the info below");
+			plugin.getLogger().severe("npc + id = " + n.getName() + " + " + n.getId());
+			plugin.getLogger().severe("citizensInteracted = " + getQuestData(quest).citizensInteracted.toString());
+			e.printStackTrace();
 		}
 	}
 
@@ -2047,14 +2045,6 @@ public class Quester {
 				}
 				if (questSec.contains("fish-caught")) {
 					getQuestData(quest).setFishCaught(questSec.getInt("fish-caught"));
-				}
-				if (questSec.contains("players-killed")) {
-					getQuestData(quest).setPlayersKilled(questSec.getInt("players-killed"));
-					List<String> playerNames = questSec.getStringList("player-killed-names");
-					List<Long> killTimes = questSec.getLongList("kill-times");
-					for (String s : playerNames) {
-						getQuestData(quest).playerKillTimes.put(UUID.fromString(s), killTimes.get(playerNames.indexOf(s)));
-					}
 				}
 				if (questSec.contains("enchantments")) {
 					LinkedList<Enchantment> enchantments = new LinkedList<Enchantment>();
