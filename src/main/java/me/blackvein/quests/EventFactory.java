@@ -1,3 +1,15 @@
+/*******************************************************************************************************
+ * Continued by FlyingPikachu/HappyPikachu with permission from _Blackvein_. All rights reserved.
+ * 
+ * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+ * NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *******************************************************************************************************/
+
 package me.blackvein.quests;
 
 import java.io.File;
@@ -892,7 +904,8 @@ public class EventFactory implements ConversationAbandonedListener {
 
 		@Override
 		public String getPromptText(ConversationContext context) {
-			String text = ChatColor.AQUA + Lang.get("eventEditorCreate") + ChatColor.GOLD + " - " + Lang.get("eventEditorEnterEventName");
+			String text = ChatColor.AQUA + Lang.get("eventEditorCreate") + ChatColor.GOLD + " - " 
+					+ Lang.get("eventEditorEnterEventName");
 			return text;
 		}
 
@@ -1026,9 +1039,9 @@ public class EventFactory implements ConversationAbandonedListener {
 
 		@Override
 		public Prompt acceptInput(ConversationContext context, String input) {
-			if (input.equalsIgnoreCase(Lang.get("cmdCancel")) == false && input.equalsIgnoreCase(Lang.get("cmdNone")) == false) {
+			if (input.equalsIgnoreCase(Lang.get("cmdCancel")) == false && input.equalsIgnoreCase(Lang.get("cmdClear")) == false) {
 				context.setSessionData(CK.E_MESSAGE, input);
-			} else if (input.equalsIgnoreCase(Lang.get("cmdNone"))) {
+			} else if (input.equalsIgnoreCase(Lang.get("cmdClear"))) {
 				context.setSessionData(CK.E_MESSAGE, null);
 			}
 			return new CreateMenuPrompt();
@@ -2178,8 +2191,12 @@ public class EventFactory implements ConversationAbandonedListener {
 
 		@Override
 		public Prompt acceptInput(ConversationContext context, String input) {
+			if (input.contains(":")) {
+				context.getForWhom().sendRawMessage(ChatColor.RED + Lang.get("eventEditorInvalidEntry") + " \':\'");
+				return new CommandsPrompt();
+			}
 			if (input.equalsIgnoreCase(Lang.get("cmdCancel")) == false && input.equalsIgnoreCase(Lang.get("cmdClear")) == false) {
-				String[] commands = input.split(",");
+				String[] commands = input.split(Lang.get("charSemi"));
 				LinkedList<String> cmdList = new LinkedList<String>();
 				cmdList.addAll(Arrays.asList(commands));
 				context.setSessionData(CK.E_COMMANDS, cmdList);

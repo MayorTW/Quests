@@ -1,3 +1,15 @@
+/*******************************************************************************************************
+ * Continued by FlyingPikachu/HappyPikachu with permission from _Blackvein_. All rights reserved.
+ * 
+ * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+ * NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *******************************************************************************************************/
+
 package me.blackvein.quests.prompts;
 
 import java.util.Arrays;
@@ -180,7 +192,11 @@ public class RequirementsPrompt extends FixedSetPrompt {
 		@Override
 		public String getPromptText(ConversationContext context) {
 			String text = Lang.get("reqMoneyPrompt");
-			text = text.replaceAll("<money>", ChatColor.DARK_PURPLE + ((Quests.economy.currencyNamePlural().isEmpty() ? Lang.get("money") : Quests.economy.currencyNamePlural())) + ChatColor.YELLOW);
+			if (Quests.economy != null) {
+				text = text.replaceAll("<money>", ChatColor.DARK_PURPLE + ((Quests.economy.currencyNamePlural().isEmpty() ? Lang.get("money") : Quests.economy.currencyNamePlural())) + ChatColor.YELLOW);
+			} else {
+				text = text.replaceAll("<money>", ChatColor.DARK_PURPLE + Lang.get("money") + ChatColor.YELLOW);
+			}
 			return ChatColor.YELLOW + text;
 		}
 
@@ -233,7 +249,7 @@ public class RequirementsPrompt extends FixedSetPrompt {
 
 		@Override
 		public String getPromptText(ConversationContext context) {
-			String text = ChatColor.LIGHT_PURPLE + Lang.get("questListTitle") + "\n" + ChatColor.DARK_PURPLE;
+			String text = ChatColor.LIGHT_PURPLE + Lang.get("reqQuestListTitle") + "\n" + ChatColor.DARK_PURPLE;
 			boolean none = true;
 			for (Quest q : quests.getQuests()) {
 				text += q.getName() + ", ";
@@ -245,16 +261,14 @@ public class RequirementsPrompt extends FixedSetPrompt {
 				text = text.substring(0, (text.length() - 2));
 				text += "\n";
 			}
-			String lang = Lang.get("reqQuestPrompt");
-			lang = lang.replaceAll("<comma>", ChatColor.RED + "" + ChatColor.BOLD + Lang.get("comma") + ChatColor.RESET + ChatColor.YELLOW);
-			text += ChatColor.YELLOW + lang;
+			text += ChatColor.YELLOW + Lang.get("reqQuestPrompt");
 			return text;
 		}
 
 		@Override
 		public Prompt acceptInput(ConversationContext context, String input) {
 			if (input.equalsIgnoreCase(Lang.get("cmdCancel")) == false && input.equalsIgnoreCase(Lang.get("cmdClear")) == false) {
-				String[] args = input.split(",");
+				String[] args = input.split(Lang.get("charSemi"));
 				LinkedList<String> questNames = new LinkedList<String>();
 				for (String s : args) {
 					if (quests.getQuest(s) == null) {
@@ -447,7 +461,7 @@ public class RequirementsPrompt extends FixedSetPrompt {
 		public String getPromptText(ConversationContext context) {
 			String text = ChatColor.LIGHT_PURPLE + Lang.get("customRequirementsTitle") + "\n";
 			if (quests.customRequirements.isEmpty()) {
-				text += ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "(" + Lang.get("stageEditorNoModules") + ")";
+				text += ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "(" + Lang.get("stageEditorNoModules") + ") ";
 			} else {
 				for (CustomRequirement cr : quests.customRequirements) {
 					text += ChatColor.DARK_PURPLE + " - " + cr.getName() + "\n";

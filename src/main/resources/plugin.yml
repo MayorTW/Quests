@@ -6,7 +6,7 @@ website: http://dev.bukkit.org/server-mods/quests/
 dev-url: https://github.com/Blackvein/Quests/
 authors: [Blackvein, HappyPikachu]
 depend: [Vault]
-softdepend: [Citizens, PhatLoots]
+softdepend: [Citizens, PhatLoots, PlaceholderAPI]
 permissions:
     quests.quest:
         description: View current Quest objectives

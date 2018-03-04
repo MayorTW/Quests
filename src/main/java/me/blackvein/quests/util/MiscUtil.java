@@ -1,3 +1,15 @@
+/*******************************************************************************************************
+ * Continued by FlyingPikachu/HappyPikachu with permission from _Blackvein_. All rights reserved.
+ * 
+ * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+ * NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *******************************************************************************************************/
+
 package me.blackvein.quests.util;
 
 import java.util.LinkedList;
@@ -16,40 +28,6 @@ public class MiscUtil {
 		s2 = s2.toUpperCase();
 		s = s.substring(1, s.length());
 		return s2 + s;
-	}
-
-	// Time: 7d 24h 5m 10s 20ms
-	public static long getTimeFromString(String string) {
-		// if it returns -1 then the string is incorrect.
-		long timeMilliSeconds = -1;
-		// replace 2 or more spaces with one space.
-		string = string.replaceAll("[ ]{2,}", " ");
-		String[] dates = string.split(" ");
-		for (String date : dates) {
-			String num = date.split("[a-zA-Z]+")[0];
-			String type = date.split("[0-9]+")[1];
-			int t = 0;
-			try {
-				t = Math.abs(Integer.parseInt(num));
-			} catch (NumberFormatException e) {
-			}
-			if (type.equals("d")) {
-				timeMilliSeconds += t * 86400000L;
-			} else if (type.equals("h")) {
-				timeMilliSeconds += t * 3600000;
-			} else if (type.equals("m")) {
-				timeMilliSeconds += t * 60000;
-			} else if (type.equals("s")) {
-				timeMilliSeconds += t * 1000;
-			} else if (type.equals("ms")) {
-				timeMilliSeconds += t;
-			}
-		}
-		// To balance the -1 at the beginning.
-		if (timeMilliSeconds > -1) {
-			timeMilliSeconds++;
-		}
-		return timeMilliSeconds;
 	}
 
 	public static String getProperMobName(EntityType type) {

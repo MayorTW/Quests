@@ -1,3 +1,15 @@
+/*******************************************************************************************************
+ * Continued by FlyingPikachu/HappyPikachu with permission from _Blackvein_. All rights reserved.
+ * 
+ * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+ * NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *******************************************************************************************************/
+
 package me.blackvein.quests.prompts;
 
 import java.util.Arrays;
@@ -106,7 +118,7 @@ public class RewardsPrompt extends FixedSetPrompt {
 				}
 			}
 		} else {
-			text += ChatColor.GRAY + "8 - " + Lang.get("rewSetHeroes") + " (" + Lang.get("rewNoHeroes") + ")\n";
+			text += ChatColor.GRAY + "8 - " + Lang.get("rewSetHeroes") + " (" + Lang.get("reqNoHeroes") + ")\n";
 		}
 		if (Quests.phatLoots != null) {
 			if (context.getSessionData(CK.REW_PHAT_LOOTS) == null) {
@@ -179,7 +191,12 @@ public class RewardsPrompt extends FixedSetPrompt {
 		@Override
 		public String getPromptText(ConversationContext context) {
 			String text = Lang.get("rewMoneyPrompt");
-			text = text.replaceAll("<money>", ChatColor.AQUA + (Quests.economy.currencyNamePlural().isEmpty() ? Lang.get("money") : Quests.economy.currencyNamePlural()) + ChatColor.YELLOW);
+			if (Quests.economy != null) {
+				text = text.replaceAll("<money>", ChatColor.AQUA + (Quests.economy.currencyNamePlural().isEmpty() ? Lang.get("money") : Quests.economy.currencyNamePlural()) + ChatColor.YELLOW);
+			} else {
+				text = text.replaceAll("<money>", ChatColor.AQUA + Lang.get("money") + ChatColor.YELLOW);
+
+			}
 			return ChatColor.YELLOW + text;
 		}
 
@@ -311,7 +328,7 @@ public class RewardsPrompt extends FixedSetPrompt {
 		@Override
 		public Prompt acceptInput(ConversationContext context, String input) {
 			if (input.equalsIgnoreCase(Lang.get("cmdCancel")) == false && input.equalsIgnoreCase(Lang.get("cmdClear")) == false) {
-				String[] args = input.split(",");
+				String[] args = input.split(Lang.get("charSemi"));
 				LinkedList<String> commands = new LinkedList<String>();
 				for (String s : args) {
 					if (s.startsWith("/")) {
@@ -710,7 +727,7 @@ public class RewardsPrompt extends FixedSetPrompt {
 		public String getPromptText(ConversationContext context) {
 			String text = ChatColor.LIGHT_PURPLE + Lang.get("customRewardsTitle") + "\n";
 			if (quests.customRewards.isEmpty()) {
-				text += ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "(" + Lang.get("stageEditorNoModules") + ")";
+				text += ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "(" + Lang.get("stageEditorNoModules") + ") ";
 			} else {
 				for (CustomReward cr : quests.customRewards) {
 					text += ChatColor.DARK_PURPLE + " - " + cr.getName() + "\n";

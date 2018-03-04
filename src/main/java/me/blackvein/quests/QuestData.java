@@ -1,8 +1,19 @@
+/*******************************************************************************************************
+ * Continued by FlyingPikachu/HappyPikachu with permission from _Blackvein_. All rights reserved.
+ * 
+ * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+ * NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *******************************************************************************************************/
+
 package me.blackvein.quests;
 
 import java.util.Collection;
-import java.util.EnumMap;
-import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -69,6 +80,7 @@ public class QuestData {
 			return i;
 		}
 	};
+	
 	public LinkedList<ItemStack> blocksBroken = new LinkedList<ItemStack>() {
 
 		private static final long serialVersionUID = -6071822509475270168L;
@@ -112,6 +124,7 @@ public class QuestData {
 			return i;
 		}
 	};
+	
 	public LinkedList<ItemStack> blocksPlaced = new LinkedList<ItemStack>() {
 
 		private static final long serialVersionUID = 4226366446050903433L;
@@ -155,6 +168,7 @@ public class QuestData {
 			return i;
 		}
 	};
+	
 	public LinkedList<ItemStack> blocksUsed = new LinkedList<ItemStack>() {
 
 		private static final long serialVersionUID = -9057864863810306890L;
@@ -198,6 +212,7 @@ public class QuestData {
 			return i;
 		}
 	};
+	
 	public LinkedList<ItemStack> blocksCut = new LinkedList<ItemStack>() {
 
 		private static final long serialVersionUID = -8204359763290995080L;
@@ -241,7 +256,8 @@ public class QuestData {
 			return i;
 		}
 	};
-	public Map<String, Integer> potionsBrewed = new HashMap<String, Integer>() {
+	
+	public LinkedHashMap<String, Integer> potionsBrewed = new LinkedHashMap<String, Integer>() {
 
 		private static final long serialVersionUID = 5079308756224324031L;
 
@@ -275,7 +291,8 @@ public class QuestData {
 				quester.updateJournal();
 		}
 	};
-	public Map<ItemStack, Integer> itemsDelivered = new HashMap<ItemStack, Integer>() {
+	
+	public LinkedHashMap<ItemStack, Integer> itemsDelivered = new LinkedHashMap<ItemStack, Integer>() {
 
 		private static final long serialVersionUID = 2712497347022734646L;
 
@@ -309,7 +326,8 @@ public class QuestData {
 				quester.updateJournal();
 		}
 	};
-	public Map<Map<Enchantment, Material>, Integer> itemsEnchanted = new HashMap<Map<Enchantment, Material>, Integer>() {
+	
+	public LinkedHashMap<Map<Enchantment, Material>, Integer> itemsEnchanted = new LinkedHashMap<Map<Enchantment, Material>, Integer>() {
 
 		private static final long serialVersionUID = 416869352279205852L;
 
@@ -343,6 +361,7 @@ public class QuestData {
 				quester.updateJournal();
 		}
 	};
+	
 	public LinkedList<EntityType> mobsKilled = new LinkedList<EntityType>() {
 
 		private static final long serialVersionUID = 8178007458817522183L;
@@ -409,6 +428,7 @@ public class QuestData {
 			return s;
 		}
 	};
+	
 	public LinkedList<Integer> mobNumKilled = new LinkedList<Integer>() {
 
 		private static final long serialVersionUID = 2228385647091499176L;
@@ -475,6 +495,7 @@ public class QuestData {
 			return s;
 		}
 	};
+	
 	public LinkedList<Location> locationsToKillWithin = new LinkedList<Location>() {
 
 		private static final long serialVersionUID = 557285564460615021L;
@@ -541,6 +562,7 @@ public class QuestData {
 			return s;
 		}
 	};
+	
 	public LinkedList<Integer> radiiToKillWithin = new LinkedList<Integer>() {
 
 		private static final long serialVersionUID = 1973115869697752181L;
@@ -607,7 +629,8 @@ public class QuestData {
 			return s;
 		}
 	};
-	public Map<Integer, Boolean> citizensInteracted = new HashMap<Integer, Boolean>() {
+	
+	public LinkedHashMap<Integer, Boolean> citizensInteracted = new LinkedHashMap<Integer, Boolean>() {
 
 		private static final long serialVersionUID = 2447610341508300847L;
 
@@ -641,6 +664,7 @@ public class QuestData {
 				quester.updateJournal();
 		}
 	};
+	
 	public LinkedList<Integer> citizensKilled = new LinkedList<Integer>() {
 
 		private static final long serialVersionUID = -6054581494356961482L;
@@ -707,6 +731,7 @@ public class QuestData {
 			return s;
 		}
 	};
+	
 	public LinkedList<Integer> citizenNumKilled = new LinkedList<Integer>() {
 
 		private static final long serialVersionUID = 1849192351499071688L;
@@ -773,6 +798,7 @@ public class QuestData {
 			return s;
 		}
 	};
+	
 	public LinkedList<Location> locationsReached = new LinkedList<Location>() {
 
 		private static final long serialVersionUID = 2875034788869133862L;
@@ -839,6 +865,7 @@ public class QuestData {
 			return s;
 		}
 	};
+	
 	public LinkedList<Boolean> hasReached = new LinkedList<Boolean>() {
 
 		private static final long serialVersionUID = -8802305642082466541L;
@@ -905,6 +932,7 @@ public class QuestData {
 			return s;
 		}
 	};
+	
 	public LinkedList<Integer> radiiToReachWithin = new LinkedList<Integer>() {
 
 		private static final long serialVersionUID = 6027656509740406846L;
@@ -971,7 +999,9 @@ public class QuestData {
 			return s;
 		}
 	};
-	public Map<EntityType, Integer> mobsTamed = new EnumMap<EntityType, Integer>(EntityType.class) {
+	
+	//public Map<EntityType, Integer> mobsTamed = new EnumMap<EntityType, Integer>(EntityType.class) {
+	public LinkedHashMap<EntityType, Integer> mobsTamed = new LinkedHashMap<EntityType, Integer>() {
 
 		private static final long serialVersionUID = 3851959471748032699L;
 
@@ -1005,7 +1035,9 @@ public class QuestData {
 				quester.updateJournal();
 		}
 	};
-	public Map<DyeColor, Integer> sheepSheared = new EnumMap<DyeColor, Integer>(DyeColor.class) {
+	
+	//public Map<DyeColor, Integer> sheepSheared = new EnumMap<DyeColor, Integer>(DyeColor.class) {
+	public LinkedHashMap<DyeColor, Integer> sheepSheared = new LinkedHashMap<DyeColor, Integer>() {
 
 		private static final long serialVersionUID = -6016463677133534885L;
 
@@ -1039,7 +1071,8 @@ public class QuestData {
 				quester.updateJournal();
 		}
 	};
-	public Map<String, Boolean> passwordsSaid = new HashMap<String, Boolean>() {
+	
+	public LinkedHashMap<String, Boolean> passwordsSaid = new LinkedHashMap<String, Boolean>() {
 
 		private static final long serialVersionUID = -4297290041298491402L;
 
@@ -1073,7 +1106,8 @@ public class QuestData {
 				quester.updateJournal();
 		}
 	};
-	public Map<String, Integer> customObjectiveCounts = new HashMap<String, Integer>() {
+	
+	public LinkedHashMap<String, Integer> customObjectiveCounts = new LinkedHashMap<String, Integer>() {
 
 		private static final long serialVersionUID = -2148775183072606256L;
 
@@ -1107,7 +1141,8 @@ public class QuestData {
 				quester.updateJournal();
 		}
 	};
-	public Map<String, Boolean> eventFired = new HashMap<String, Boolean>() {
+	
+	public LinkedHashMap<String, Boolean> eventFired = new LinkedHashMap<String, Boolean>() {
 
 		private static final long serialVersionUID = 7106048037834965123L;
 
@@ -1141,6 +1176,7 @@ public class QuestData {
 				quester.updateJournal();
 		}
 	};
+	
 	private int fishCaught = 0;
 	private int playersKilled = 0;
 	public long delayStartTime = 0;

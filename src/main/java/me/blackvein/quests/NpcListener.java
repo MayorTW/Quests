@@ -1,3 +1,15 @@
+/*******************************************************************************************************
+ * Continued by FlyingPikachu/HappyPikachu with permission from _Blackvein_. All rights reserved.
+ * 
+ * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+ * NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *******************************************************************************************************/
+
 package me.blackvein.quests;
 
 import java.text.MessageFormat;
@@ -69,12 +81,12 @@ public class NpcListener implements Listener {
 								if (hand.hasItemMeta()) {
 									text += ChatColor.LIGHT_PURPLE + "" + ChatColor.ITALIC + (hand.getItemMeta().hasDisplayName() ? hand.getItemMeta().getDisplayName() + ChatColor.GRAY + " (" : "");
 								}
-								text += ChatColor.AQUA + Quester.prettyItemString(hand.getType().name()) + (hand.getDurability() != 0 ? (":" + ChatColor.BLUE + hand.getDurability()) : "") + ChatColor.GRAY;
+								text += ChatColor.AQUA + ItemUtil.getName(hand) + (hand.getDurability() != 0 ? (":" + ChatColor.BLUE + hand.getDurability()) : "") + ChatColor.GRAY;
 								if (hand.hasItemMeta()) {
 									text += (hand.getItemMeta().hasDisplayName() ? ")" : "");
 								}
 								text += " x " + ChatColor.DARK_AQUA + hand.getAmount() + ChatColor.GRAY;
-								evt.getClicker().sendMessage(Lang.get("questInvalidDeliveryItem").replaceAll("<item>", text));
+								evt.getClicker().sendMessage(Lang.get(player, "questInvalidDeliveryItem").replaceAll("<item>", text));
 								break;
 							}
 						}
@@ -127,18 +139,18 @@ public class NpcListener implements Listener {
 									}
 									plugin.conversationFactory.buildConversation(player).begin();
 								} else if (quester.currentQuests.containsKey(q) == false) {
-									String msg = Lang.get("questMaxAllowed");
+									String msg = Lang.get(player, "questMaxAllowed");
 									msg = msg.replaceAll("<number>", String.valueOf(Quests.maxQuests));
 									player.sendMessage(ChatColor.YELLOW + msg);
 								}
 							} else if (quester.currentQuests.size() < Quests.maxQuests || Quests.maxQuests < 1) {
 								if (quester.getDifference(q) > 0) {
-									String early = Lang.get("questTooEarly");
+									String early = Lang.get(player, "questTooEarly");
 									early = early.replaceAll("<quest>", ChatColor.AQUA + q.name + ChatColor.YELLOW);
 									early = early.replaceAll("<time>", ChatColor.DARK_PURPLE + Quests.getTime(quester.getDifference(q)) + ChatColor.YELLOW);
 									player.sendMessage(ChatColor.YELLOW + early);
 								} else if (q.redoDelay < 0) {
-									String completed = Lang.get("questAlreadyCompleted");
+									String completed = Lang.get(player, "questAlreadyCompleted");
 									completed = completed.replaceAll("<quest>", ChatColor.AQUA + q.name + ChatColor.YELLOW);
 									player.sendMessage(ChatColor.YELLOW + completed);
 								} else {
@@ -150,12 +162,12 @@ public class NpcListener implements Listener {
 									plugin.conversationFactory.buildConversation(player).begin();
 								}
 							} else if (quester.currentQuests.containsKey(q) == false) {
-								String msg = Lang.get("questMaxAllowed");
+								String msg = Lang.get(player, "questMaxAllowed");
 								msg = msg.replaceAll("<number>", String.valueOf(Quests.maxQuests));
 								player.sendMessage(ChatColor.YELLOW + msg);
 							}
 						} else if (npcQuests.isEmpty()) {
-							evt.getClicker().sendMessage(ChatColor.YELLOW + Lang.get("noMoreQuest"));
+							evt.getClicker().sendMessage(ChatColor.YELLOW + Lang.get(player, "noMoreQuest"));
 						}
 					}
 				}

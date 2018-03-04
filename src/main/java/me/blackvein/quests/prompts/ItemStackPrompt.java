@@ -1,3 +1,15 @@
+/*******************************************************************************************************
+ * Continued by FlyingPikachu/HappyPikachu with permission from _Blackvein_. All rights reserved.
+ * 
+ * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+ * NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *******************************************************************************************************/
+
 package me.blackvein.quests.prompts;
 
 import java.util.ArrayList;
@@ -378,7 +390,7 @@ public class ItemStackPrompt extends FixedSetPrompt {
 
 		@Override
 		public String getPromptText(ConversationContext cc) {
-			return ChatColor.YELLOW + Lang.get("itemCreateEnterName");
+			return ChatColor.YELLOW + Lang.get("itemCreateEnterDisplay");
 		}
 
 		@Override
@@ -405,7 +417,7 @@ public class ItemStackPrompt extends FixedSetPrompt {
 			if (input.equalsIgnoreCase(Lang.get("cmdCancel")) == false && input.equalsIgnoreCase(Lang.get("cmdClear")) == false) {
 				input = Quests.parseString(input);
 				LinkedList<String> lore = new LinkedList<String>();
-				lore.addAll(Arrays.asList(input.split(";")));
+				lore.addAll(Arrays.asList(input.split(Lang.get("charSemi"))));
 				cc.setSessionData("tempLore", lore);
 			} else if (input.equalsIgnoreCase("clear")) {
 				cc.setSessionData("tempLore", null);

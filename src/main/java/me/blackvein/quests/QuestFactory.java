@@ -1,3 +1,15 @@
+/*******************************************************************************************************
+ * Continued by FlyingPikachu/HappyPikachu with permission from _Blackvein_. All rights reserved.
+ * 
+ * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+ * NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *******************************************************************************************************/
+
 package me.blackvein.quests;
 
 import java.io.File;
@@ -375,7 +387,8 @@ public class QuestFactory implements ConversationAbandonedListener {
 		@Override
 		public String getPromptText(ConversationContext context) {
 			String text = ChatColor.GOLD + Lang.get("questCreateTitle") + "\n";
-			text += ChatColor.AQUA + Lang.get("questEditorCreate") + " " + ChatColor.GOLD + "- " + Lang.get("questEditorEnterQuestName");
+			text += ChatColor.AQUA + Lang.get("questEditorCreate") + " " + ChatColor.GOLD + "- " 
+					+ Lang.get("questEditorEnterQuestName");
 			return text;
 		}
 
@@ -731,7 +744,6 @@ public class QuestFactory implements ConversationAbandonedListener {
 				delay = i * 1000;
 			} catch (NumberFormatException e) {
 				context.getForWhom().sendRawMessage(ChatColor.ITALIC + "" + ChatColor.RED + input + ChatColor.RESET + ChatColor.RED + " " + Lang.get("stageEditorInvalidNumber"));
-				// delay = MiscUtil.getTimeFromString(input);
 				return new RedoDelayPrompt();
 			}
 			if (delay < -1) {
@@ -788,7 +800,8 @@ public class QuestFactory implements ConversationAbandonedListener {
 						}
 						quests.updateData();
 					}
-					context.getForWhom().sendRawMessage(ChatColor.BOLD + Lang.get("questEditorSaved"));
+					context.getForWhom().sendRawMessage(ChatColor.GREEN
+							+ Lang.get("questEditorSaved").replaceAll("<command>", "/questadmin " + Lang.get("COMMAND_QUESTADMIN_RELOAD")));
 				} catch (IOException e) {
 					e.printStackTrace();
 				} catch (InvalidConfigurationException e) {
@@ -1066,6 +1079,8 @@ public class QuestFactory implements ConversationAbandonedListener {
 		String disconnectEvent;
 		LinkedList<String> chatEvents;
 		LinkedList<String> chatEventTriggers;
+		LinkedList<String> commandEvents;
+		LinkedList<String> commandEventTriggers;
 		Long delay;
 		String overrideDisplay;
 		String delayMessage;
@@ -1124,6 +1139,8 @@ public class QuestFactory implements ConversationAbandonedListener {
 			disconnectEvent = null;
 			chatEvents = null;
 			chatEventTriggers = null;
+			commandEvents = null;
+			commandEventTriggers = null;
 			delay = null;
 			overrideDisplay = null;
 			delayMessage = null;
@@ -1223,6 +1240,10 @@ public class QuestFactory implements ConversationAbandonedListener {
 			if (cc.getSessionData(pref + CK.S_CHAT_EVENTS) != null) {
 				chatEvents = (LinkedList<String>) cc.getSessionData(pref + CK.S_CHAT_EVENTS);
 				chatEventTriggers = (LinkedList<String>) cc.getSessionData(pref + CK.S_CHAT_EVENT_TRIGGERS);
+			}
+			if (cc.getSessionData(pref + CK.S_COMMAND_EVENTS) != null) {
+				commandEvents = (LinkedList<String>) cc.getSessionData(pref + CK.S_COMMAND_EVENTS);
+				commandEventTriggers = (LinkedList<String>) cc.getSessionData(pref + CK.S_COMMAND_EVENT_TRIGGERS);
 			}
 			if (cc.getSessionData(pref + CK.S_DELAY) != null) {
 				delay = (Long) cc.getSessionData(pref + CK.S_DELAY);
@@ -1331,6 +1352,10 @@ public class QuestFactory implements ConversationAbandonedListener {
 			if (chatEvents != null && chatEvents.isEmpty() == false) {
 				stage.set("chat-events", chatEvents);
 				stage.set("chat-event-triggers", chatEventTriggers);
+			}
+			if (commandEvents != null && commandEvents.isEmpty() == false) {
+				stage.set("command-events", commandEvents);
+				stage.set("command-event-triggers", commandEventTriggers);
 			}
 			if (delay != null) {
 				stage.set("delay", delay.intValue() / 1000);
@@ -1681,6 +1706,16 @@ public class QuestFactory implements ConversationAbandonedListener {
 				cc.setSessionData(pref + CK.S_CHAT_EVENTS, chatEvents);
 				cc.setSessionData(pref + CK.S_CHAT_EVENT_TRIGGERS, chatEventTriggers);
 			}
+			if (stage.commandEvents != null) {
+				LinkedList<String> commandEvents = new LinkedList<String>();
+				LinkedList<String> commandEventTriggers = new LinkedList<String>();
+				for (String s : stage.commandEvents.keySet()) {
+					commandEventTriggers.add(s);
+					commandEvents.add(stage.commandEvents.get(s).getName());
+				}
+				cc.setSessionData(pref + CK.S_COMMAND_EVENTS, commandEvents);
+				cc.setSessionData(pref + CK.S_COMMAND_EVENT_TRIGGERS, commandEventTriggers);
+			}
 			if (stage.delay != -1) {
 				cc.setSessionData(pref + CK.S_DELAY, stage.delay);
 				if (stage.delayMessage != null) {
@@ -1700,7 +1735,6 @@ public class QuestFactory implements ConversationAbandonedListener {
 				cc.setSessionData(pref + CK.S_START_MESSAGE, stage.startMessage);
 			}
 		}
-		//
 	}
 
 	private class SelectDeletePrompt extends StringPrompt {

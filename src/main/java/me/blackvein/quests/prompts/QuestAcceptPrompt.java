@@ -1,3 +1,15 @@
+/*******************************************************************************************************
+ * Continued by FlyingPikachu/HappyPikachu with permission from _Blackvein_. All rights reserved.
+ * 
+ * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+ * NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *******************************************************************************************************/
+
 package me.blackvein.quests.prompts;
 
 import java.text.MessageFormat;
@@ -96,7 +108,11 @@ public class QuestAcceptPrompt extends StringPrompt {
 							for (String msg : s.split("<br>")) {
 								player.sendMessage(msg);
 							}
-							plugin.conversationFactory.buildConversation((Conversable) player).begin();
+							if (!Quests.askConfirmation) {
+								plugin.getQuester(player.getUniqueId()).takeQuest(plugin.getQuest(plugin.getQuester(player.getUniqueId()).questToTake), false);
+							} else {
+								plugin.conversationFactory.buildConversation((Conversable) player).begin();
+							}
 						} else {
 							player.sendMessage(q.failRequirements);
 						}
@@ -122,7 +138,11 @@ public class QuestAcceptPrompt extends StringPrompt {
 							for (String msg : s.split("<br>")) {
 								player.sendMessage(msg);
 							}
-							plugin.conversationFactory.buildConversation((Conversable) player).begin();
+							if (!Quests.askConfirmation) {
+								plugin.getQuester(player.getUniqueId()).takeQuest(plugin.getQuest(plugin.getQuester(player.getUniqueId()).questToTake), false);
+							} else {
+								plugin.conversationFactory.buildConversation((Conversable) player).begin();
+							}
 						}
 					} else if (quester.currentQuests.containsKey(q) == false) {
 						String msg = Lang.get("questMaxAllowed");

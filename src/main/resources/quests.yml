@@ -1,3 +1,4 @@
+# For non-English characters, this file MUST stay encoded in UTF-8
 quests:
   Miner:
     name: 'Stone Miner'
@@ -38,14 +39,14 @@ quests:
             - Pig
           mob-amounts:
             - 3
-          finish-event: GoodJob
+          finish-event: NiceFinish
         2:
           death-event: DeathFail
           mobs-to-kill:
             - Zombie
           mob-amounts:
             - 2
-          finish-event: GoodJob
+          finish-event: NiceFinish
         3:
           death-event: DeathFail
           mobs-to-kill:
@@ -68,10 +69,10 @@ quests:
     stages:
       ordered:
         1:
-          start-event: FishingStart
+          start-event: RodStart
           death-event: DeathFail
           chat-events:
-            - "RodEvent"
+            - "GiveRod"
           chat-event-triggers:
             - "rod"
           fish-to-catch: 5
@@ -90,7 +91,7 @@ quests:
           - 10
           break-block-durability:
           - 0
-          start-event: TimerEvent
+          start-event: TimerStart
           finish-event: CancelTimer
     rewards:
       items:

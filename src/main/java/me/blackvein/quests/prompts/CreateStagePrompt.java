@@ -1,3 +1,15 @@
+/*******************************************************************************************************
+ * Continued by FlyingPikachu/HappyPikachu with permission from _Blackvein_. All rights reserved.
+ * 
+ * THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESSED OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED
+ * TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN
+ * NO EVENT SHALL THE REGENTS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+ * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+ * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY
+ * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
+ * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+ *******************************************************************************************************/
+
 package me.blackvein.quests.prompts;
 
 import java.util.Arrays;
@@ -19,6 +31,7 @@ import org.bukkit.conversations.StringPrompt;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Tameable;
 import org.bukkit.inventory.ItemStack;
 
 import me.blackvein.quests.CustomObjective;
@@ -124,7 +137,7 @@ public class CreateStagePrompt extends FixedSetPrompt {
 				LinkedList<String> names = (LinkedList<String>) context.getSessionData(pref + CK.S_ENCHANT_NAMES);
 				LinkedList<Integer> amnts = (LinkedList<Integer>) context.getSessionData(pref + CK.S_ENCHANT_AMOUNTS);
 				for (int i = 0; i < enchants.size(); i++) {
-					text += ChatColor.GRAY + "    - " + ChatColor.BLUE + Quester.prettyItemString(names.get(i)) + ChatColor.GRAY + " " + Lang.get("with") + " " + ChatColor.AQUA + Quester.prettyString(enchants.get(i)) + ChatColor.GRAY + " x " + ChatColor.DARK_AQUA + amnts.get(i) + "\n";
+					text += ChatColor.GRAY + "    - " + ChatColor.BLUE + Quester.prettyItemString(names.get(i)) + ChatColor.GRAY + " " + Lang.get("with") + " " + ChatColor.AQUA + Quester.prettyEnchantmentString(Quests.getEnchantment(enchants.get(i))) + ChatColor.GRAY + " x " + ChatColor.DARK_AQUA + amnts.get(i) + "\n";
 				}
 			}
 			if (questFactory.quests.citizens != null) {
@@ -176,7 +189,7 @@ public class CreateStagePrompt extends FixedSetPrompt {
 				LinkedList<Integer> amnts = (LinkedList<Integer>) context.getSessionData(pref + CK.S_MOB_AMOUNTS);
 				if (context.getSessionData(pref + CK.S_MOB_KILL_LOCATIONS) == null) {
 					for (int i = 0; i < mobs.size(); i++) {
-						text += ChatColor.GRAY + "    - " + ChatColor.AQUA + Quester.prettyString(mobs.get(i)) + ChatColor.GRAY + " x " + ChatColor.DARK_AQUA + amnts.get(i) + "\n";
+						text += ChatColor.GRAY + "    - " + ChatColor.AQUA + Quester.prettyMobString(Quests.getMobType(mobs.get(i))) + ChatColor.GRAY + " x " + ChatColor.DARK_AQUA + amnts.get(i) + "\n";
 					}
 				} else {
 					LinkedList<String> locs = (LinkedList<String>) context.getSessionData(pref + CK.S_MOB_KILL_LOCATIONS);
@@ -185,7 +198,7 @@ public class CreateStagePrompt extends FixedSetPrompt {
 					for (int i = 0; i < mobs.size(); i++) {
 						String msg = Lang.get("blocksWithin");
 						msg = msg.replaceAll("<amount>", ChatColor.DARK_PURPLE + "" + radii.get(i) + ChatColor.GRAY);
-						text += ChatColor.GRAY + "    - " + ChatColor.BLUE + Quester.prettyString(mobs.get(i)) + ChatColor.GRAY + " x " + ChatColor.DARK_AQUA + amnts.get(i) + ChatColor.GRAY + msg + ChatColor.YELLOW + names.get(i) + " (" + locs.get(i) + ")\n";
+						text += ChatColor.GRAY + "    - " + ChatColor.BLUE + Quester.prettyMobString(Quests.getMobType(mobs.get(i))) + ChatColor.GRAY + " x " + ChatColor.DARK_AQUA + amnts.get(i) + ChatColor.GRAY + msg + ChatColor.YELLOW + names.get(i) + " (" + locs.get(i) + ")\n";
 					}
 				}
 			}
@@ -277,9 +290,9 @@ public class CreateStagePrompt extends FixedSetPrompt {
 				text += ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "23 " + ChatColor.RESET + ChatColor.DARK_PURPLE + "- " + Lang.get("stageEditorCompleteMessage") + ChatColor.GRAY + "(" + ChatColor.AQUA + "\"" + context.getSessionData(pref + CK.S_COMPLETE_MESSAGE) + "\"" + ChatColor.GRAY + ")\n";
 			}
 			if (context.getSessionData(pref + CK.S_OVERRIDE_DISPLAY) == null) {
-				text += ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "24 " + ChatColor.RESET + ChatColor.DARK_PURPLE + "- " + Lang.get("stageObjectiveOverride") + ChatColor.GRAY + " (" + Lang.get("noneSet") + ")\n";
+				text += ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "24 " + ChatColor.RESET + ChatColor.DARK_PURPLE + "- " + Lang.get("stageEditorObjectiveOverride") + ChatColor.GRAY + " (" + Lang.get("noneSet") + ")\n";
 			} else {
-				text += ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "24 " + ChatColor.RESET + ChatColor.DARK_PURPLE + "- " + Lang.get("stageObjectiveOverride") + ChatColor.GRAY + "(" + ChatColor.DARK_AQUA + "\"" + context.getSessionData(pref + CK.S_OVERRIDE_DISPLAY) + "\"" + ChatColor.GRAY + ")\n";
+				text += ChatColor.LIGHT_PURPLE + "" + ChatColor.BOLD + "24 " + ChatColor.RESET + ChatColor.DARK_PURPLE + "- " + Lang.get("stageEditorObjectiveOverride") + ChatColor.GRAY + "(" + ChatColor.DARK_AQUA + "\"" + context.getSessionData(pref + CK.S_OVERRIDE_DISPLAY) + "\"" + ChatColor.GRAY + ")\n";
 			}
 			text += ChatColor.RED + "" + ChatColor.BOLD + "25 " + ChatColor.RESET + ChatColor.DARK_PURPLE + "- " + Lang.get("stageEditorDelete") + "\n";
 			text += ChatColor.GREEN + "" + ChatColor.BOLD + "26 " + ChatColor.RESET + ChatColor.DARK_PURPLE + "- " + Lang.get("done") + "\n";
@@ -497,8 +510,7 @@ public class CreateStagePrompt extends FixedSetPrompt {
 		@Override
 		public String getPromptText(ConversationContext context) {
 			String text = ChatColor.YELLOW + Lang.get("stageEditorPasswordPhrasePrompt") + "\n";
-			text += ChatColor.ITALIC + "" + ChatColor.GOLD + Lang.get("stageEditorPasswordPhraseHint1") + "\n";
-			text += ChatColor.RESET + "" + ChatColor.YELLOW + Lang.get("stageEditorPasswordPhraseHint2");
+			text += ChatColor.ITALIC + "" + ChatColor.GOLD + Lang.get("stageEditorPasswordPhraseHint");
 			return text;
 		}
 
@@ -509,13 +521,13 @@ public class CreateStagePrompt extends FixedSetPrompt {
 					@SuppressWarnings("unchecked")
 					LinkedList<LinkedList<String>> phrases = (LinkedList<LinkedList<String>>) context.getSessionData(pref + CK.S_PASSWORD_PHRASES);
 					LinkedList<String> newPhrases = new LinkedList<String>();
-					newPhrases.addAll(Arrays.asList(input.split("\\|")));
+					newPhrases.addAll(Arrays.asList(input.split(Lang.get("charSemi"))));
 					phrases.add(newPhrases);
 					context.setSessionData(pref + CK.S_PASSWORD_PHRASES, phrases);
 				} else {
 					LinkedList<LinkedList<String>> phrases = new LinkedList<LinkedList<String>>();
 					LinkedList<String> newPhrases = new LinkedList<String>();
-					newPhrases.addAll(Arrays.asList(input.split("\\|")));
+					newPhrases.addAll(Arrays.asList(input.split(Lang.get("charSemi"))));
 					phrases.add(newPhrases);
 					context.setSessionData(pref + CK.S_PASSWORD_PHRASES, phrases);
 				}
@@ -1793,8 +1805,12 @@ public class CreateStagePrompt extends FixedSetPrompt {
 		@Override
 		public String getPromptText(ConversationContext context) {
 			String text = ChatColor.LIGHT_PURPLE + "- " + ChatColor.DARK_PURPLE + Lang.get("stageEditorEnchantments") + ChatColor.LIGHT_PURPLE + " -\n";
-			for (Enchantment e : Enchantment.values()) {
-				text += ChatColor.GREEN + Quester.prettyEnchantmentString(e) + ", ";
+			for (int i = 0; i < Enchantment.values().length; i++) {
+				if (i == Enchantment.values().length - 1) {
+					text += ChatColor.GREEN + Quester.prettyEnchantmentString(Enchantment.values()[i]) + " ";
+				} else {
+					text += ChatColor.GREEN + Quester.prettyEnchantmentString(Enchantment.values()[i]) + ", ";
+				}
 			}
 			text = text.substring(0, text.length() - 1);
 			return text + "\n" + ChatColor.YELLOW + Lang.get("stageEditorEnchantTypePrompt");
@@ -1803,7 +1819,7 @@ public class CreateStagePrompt extends FixedSetPrompt {
 		@Override
 		public Prompt acceptInput(ConversationContext context, String input) {
 			if (input.equalsIgnoreCase(Lang.get("cmdCancel")) == false) {
-				String[] args = input.split(",");
+				String[] args = input.split(Lang.get("charSemi"));
 				LinkedList<String> enchs = new LinkedList<String>();
 				boolean valid;
 				for (String s : args) {
@@ -2070,7 +2086,7 @@ public class CreateStagePrompt extends FixedSetPrompt {
 		@Override
 		public Prompt acceptInput(ConversationContext context, String input) {
 			if (input.equalsIgnoreCase(Lang.get("cmdCancel")) == false) {
-				String[] args = input.split(";");
+				String[] args = input.split(Lang.get("charSemi"));
 				LinkedList<String> messages = new LinkedList<String>();
 				messages.addAll(Arrays.asList(args));
 				context.setSessionData(pref + CK.S_DELIVERY_MESSAGES, messages);
@@ -2600,7 +2616,7 @@ public class CreateStagePrompt extends FixedSetPrompt {
 		public Prompt acceptInput(ConversationContext context, String input) {
 			if (input.equalsIgnoreCase(Lang.get("cmdCancel")) == false) {
 				LinkedList<String> locNames = new LinkedList<String>();
-				locNames.addAll(Arrays.asList(input.split(",")));
+				locNames.addAll(Arrays.asList(input.split(Lang.get("charSemi"))));
 				context.setSessionData(pref + CK.S_MOB_KILL_LOCATIONS_NAMES, locNames);
 			}
 			return new MobListPrompt();
@@ -2801,7 +2817,7 @@ public class CreateStagePrompt extends FixedSetPrompt {
 		public Prompt acceptInput(ConversationContext context, String input) {
 			if (input.equalsIgnoreCase(Lang.get("cmdCancel")) == false) {
 				LinkedList<String> locNames = new LinkedList<String>();
-				locNames.addAll(Arrays.asList(input.split(",")));
+				locNames.addAll(Arrays.asList(input.split(Lang.get("charSemi"))));
 				context.setSessionData(pref + CK.S_REACH_LOCATIONS_NAMES, locNames);
 			}
 			return new ReachListPrompt();
@@ -2900,15 +2916,12 @@ public class CreateStagePrompt extends FixedSetPrompt {
 			final EntityType[] mobArr = EntityType.values();
 			for (int i = 0; i < mobArr.length; i++) {
 				final EntityType type = mobArr[i];
-				if (type.isAlive() == false) {
+				if (type.isAlive() == false || Tameable.class.isAssignableFrom(type.getEntityClass()) == false) {
 					continue;
 				}
-				if (i < (mobArr.length - 1)) {
-					mobs += MiscUtil.getProperMobName(mobArr[i]) + ", ";
-				} else {
-					mobs += MiscUtil.getProperMobName(mobArr[i]) + "\n";
-				}
+				mobs += MiscUtil.getProperMobName(mobArr[i]) + ", ";
 			}
+			mobs = mobs.substring(0, mobs.length() - 2) + "\n";
 			return mobs + ChatColor.YELLOW + Lang.get("stageEditorMobsPrompt");
 		}
 
@@ -3115,7 +3128,7 @@ public class CreateStagePrompt extends FixedSetPrompt {
 	private class EventListPrompt extends FixedSetPrompt {
 
 		public EventListPrompt() {
-			super("1", "2", "3", "4", "5", "6");
+			super("1", "2", "3", "4", "5", "6", "7");
 		}
 
 		@SuppressWarnings("unchecked")
@@ -3152,15 +3165,20 @@ public class CreateStagePrompt extends FixedSetPrompt {
 					text += ChatColor.AQUA + "    - " + event + ChatColor.BLUE + " (" + Lang.get("stageEditorTriggeredBy") + ": \"" + chatEventTriggers.get(chatEvents.indexOf(event)) + "\")\n";
 				}
 			}
-			text += ChatColor.BLUE + "" + ChatColor.BOLD + "6" + ChatColor.RESET + ChatColor.BLUE + " - " + Lang.get("back");
+			if (context.getSessionData(pref + CK.S_COMMAND_EVENTS) == null) {
+				text += ChatColor.BLUE + "" + ChatColor.BOLD + "6" + ChatColor.RESET + ChatColor.YELLOW + " - " + Lang.get("stageEditorCommandEvents") + " (" + Lang.get("noneSet") + ")\n";
+			} else {
+				text += ChatColor.BLUE + "" + ChatColor.BOLD + "6" + ChatColor.RESET + ChatColor.YELLOW + " - " + Lang.get("stageEditorCommandEvents") + "\n";
+				LinkedList<String> commandEvents = (LinkedList<String>) context.getSessionData(pref + CK.S_COMMAND_EVENTS);
+				LinkedList<String> commandEventTriggers = (LinkedList<String>) context.getSessionData(pref + CK.S_COMMAND_EVENT_TRIGGERS);
+				for (String event : commandEvents) {
+					text += ChatColor.AQUA + "    - " + event + ChatColor.BLUE + " (" + Lang.get("stageEditorTriggeredBy") + ": \"" + commandEventTriggers.get(commandEvents.indexOf(event)) + "\")\n";
+				}
+			}
+			text += ChatColor.BLUE + "" + ChatColor.BOLD + "7" + ChatColor.RESET + ChatColor.BLUE + " - " + Lang.get("back");
 			return text;
 		}
 
-		/*
-		 * en.put("stageEditorStageEvents", "Stage Events"); en.put("stageEditorStartEvent", "Start Event"); en.put("stageEditorFinishEvent",
-		 * "Finish Event"); en.put("stageEditorChatEvents", "Chat Events"); en.put("stageEditorDeathEvent", "Death Event");
-		 * en.put("stageEditorDisconnectEvent", "Disconnect Event");
-		 */
 		@Override
 		protected Prompt acceptValidatedInput(ConversationContext context, String input) {
 			if (input.equalsIgnoreCase("1")) {
@@ -3174,6 +3192,8 @@ public class CreateStagePrompt extends FixedSetPrompt {
 			} else if (input.equalsIgnoreCase("5")) {
 				return new ChatEventPrompt();
 			} else if (input.equalsIgnoreCase("6")) {
+				return new CommandEventPrompt();
+			} else if (input.equalsIgnoreCase("7")) {
 				return new CreateStagePrompt(stageNum, questFactory, citizens);
 			} else {
 				return new EventListPrompt();
@@ -3413,7 +3433,7 @@ public class CreateStagePrompt extends FixedSetPrompt {
 		public String getPromptText(ConversationContext context) {
 			String tempEvent = (String) context.getSessionData(pref + CK.S_CHAT_TEMP_EVENT);
 			String text = ChatColor.GOLD + "- " + Lang.get("stageEditorChatTrigger") + " -\n";
-			text += ChatColor.YELLOW + Lang.get("stageEditorChatEventsTriggerPromptA") + " " + ChatColor.AQUA + tempEvent + " " + ChatColor.YELLOW + Lang.get("stageEditorChatEventsTriggerPromptB");
+			text += Lang.get("stageEditorChatEventsTriggerPrompt").replaceAll("<event>", tempEvent);
 			return text;
 		}
 
@@ -3447,6 +3467,93 @@ public class CreateStagePrompt extends FixedSetPrompt {
 			}
 		}
 	}
+	
+	private class CommandEventPrompt extends StringPrompt {
+
+		@Override
+		public String getPromptText(ConversationContext context) {
+			String text = ChatColor.DARK_GREEN + "- " + Lang.get("stageEditorCommandEvents") + " -\n";
+			if (questFactory.quests.events.isEmpty()) {
+				text += ChatColor.RED + "- " + Lang.get("none");
+			} else {
+				for (Event e : questFactory.quests.events) {
+					text += ChatColor.GREEN + "- " + e.getName() + "\n";
+				}
+			}
+			return text + ChatColor.YELLOW + Lang.get("stageEditorCommandEventsPrompt");
+		}
+
+		@Override
+		public Prompt acceptInput(ConversationContext context, String input) {
+			Player player = (Player) context.getForWhom();
+			if (input.equalsIgnoreCase(Lang.get("cmdCancel")) == false && input.equalsIgnoreCase(Lang.get("cmdClear")) == false) {
+				Event found = null;
+				for (Event e : questFactory.quests.events) {
+					if (e.getName().equalsIgnoreCase(input)) {
+						found = e;
+						break;
+					}
+				}
+				if (found == null) {
+					player.sendMessage(ChatColor.RED + input + ChatColor.YELLOW + " " + Lang.get("stageEditorInvalidEvent"));
+					return new CommandEventPrompt();
+				} else {
+					context.setSessionData(pref + CK.S_COMMAND_TEMP_EVENT, found.getName());
+					return new CommandEventTriggerPrompt();
+				}
+			} else if (input.equalsIgnoreCase(Lang.get("cmdCancel"))) {
+				return new EventListPrompt();
+			} else if (input.equalsIgnoreCase(Lang.get("cmdClear"))) {
+				context.setSessionData(pref + CK.S_COMMAND_EVENTS, null);
+				context.setSessionData(pref + CK.S_COMMAND_EVENT_TRIGGERS, null);
+				player.sendMessage(ChatColor.YELLOW + Lang.get("stageEditorCommandEventsCleared"));
+				return new EventListPrompt();
+			} else {
+				return new CommandEventPrompt();
+			}
+		}
+	}
+
+	private class CommandEventTriggerPrompt extends StringPrompt {
+
+		@Override
+		public String getPromptText(ConversationContext context) {
+			String tempEvent = (String) context.getSessionData(pref + CK.S_COMMAND_TEMP_EVENT);
+			String text = ChatColor.GOLD + "- " + Lang.get("stageEditorCommandTrigger") + " -\n";
+			text += Lang.get("stageEditorCommandEventsTriggerPrompt").replaceAll("<event>", tempEvent);
+			return text;
+		}
+
+		@SuppressWarnings("unchecked")
+		@Override
+		public Prompt acceptInput(ConversationContext context, String input) {
+			if (input.equalsIgnoreCase(Lang.get("cmdCancel")) == false) {
+				if (context.getSessionData(pref + CK.S_COMMAND_EVENTS) == null) {
+					LinkedList<String> commandEvents = new LinkedList<String>();
+					LinkedList<String> commandEventTriggers = new LinkedList<String>();
+					String event = (String) context.getSessionData(pref + CK.S_COMMAND_TEMP_EVENT);
+					commandEvents.add(event);
+					commandEventTriggers.add(input.trim());
+					context.setSessionData(pref + CK.S_COMMAND_EVENTS, commandEvents);
+					context.setSessionData(pref + CK.S_COMMAND_EVENT_TRIGGERS, commandEventTriggers);
+					return new EventListPrompt();
+				} else {
+					LinkedList<String> commandEvents = (LinkedList<String>) context.getSessionData(pref + CK.S_COMMAND_EVENTS);
+					LinkedList<String> commandEventTriggers = (LinkedList<String>) context.getSessionData(pref + CK.S_COMMAND_EVENT_TRIGGERS);
+					String event = (String) context.getSessionData(pref + CK.S_COMMAND_TEMP_EVENT);
+					commandEvents.add(event);
+					commandEventTriggers.add(input.trim());
+					context.setSessionData(pref + CK.S_COMMAND_EVENTS, commandEvents);
+					context.setSessionData(pref + CK.S_COMMAND_EVENT_TRIGGERS, commandEventTriggers);
+					return new EventListPrompt();
+				}
+			} else if (input.equalsIgnoreCase(Lang.get("cmdCancel"))) {
+				return new EventListPrompt();
+			} else {
+				return new CommandEventTriggerPrompt();
+			}
+		}
+	}
 
 	private class DelayPrompt extends StringPrompt {
 
@@ -3466,22 +3573,19 @@ public class CreateStagePrompt extends FixedSetPrompt {
 				player.sendMessage(ChatColor.GREEN + Lang.get("stageEditorDelayCleared"));
 				return new CreateStagePrompt(stageNum, questFactory, citizens);
 			}
-			long l;
+			long stageDelay;
 			try {
-				l = Long.parseLong(input);
+				int i = Integer.parseInt(input);
+				stageDelay = i * 1000;
 			} catch (NumberFormatException e) {
-				// returns -1 if incorrect input
-				l = MiscUtil.getTimeFromString(input);
-				if (l == -1) {
-					player.sendMessage(ChatColor.RED + Lang.get("stageEditorNoNumber"));
-					return new DelayPrompt();
-				}
+				player.sendMessage(ChatColor.RED + Lang.get("stageEditorNoNumber"));
+				return new DelayPrompt();
 			}
-			if (l < 1000) {
+			if (stageDelay < 1000) {
 				player.sendMessage(ChatColor.RED + Lang.get("stageEditorInvalidDelay"));
 				return new DelayPrompt();
 			} else {
-				context.setSessionData(pref + CK.S_DELAY, l);
+				context.setSessionData(pref + CK.S_DELAY, stageDelay);
 				return new CreateStagePrompt(stageNum, questFactory, citizens);
 			}
 		}
@@ -3619,7 +3723,7 @@ public class CreateStagePrompt extends FixedSetPrompt {
 		public String getPromptText(ConversationContext context) {
 			String text = ChatColor.LIGHT_PURPLE + "- " + Lang.get("stageEditorCustom") + " -\n";
 			if (questFactory.quests.customObjectives.isEmpty()) {
-				text += ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "(" + Lang.get("stageEditorNoModules") + ")";
+				text += ChatColor.BOLD + "" + ChatColor.DARK_PURPLE + "(" + Lang.get("stageEditorNoModules") + ") ";
 			} else {
 				for (CustomObjective co : questFactory.quests.customObjectives) {
 					text += ChatColor.DARK_PURPLE + " - " + co.getName() + "\n";

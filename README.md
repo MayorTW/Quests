@@ -1,11 +1,15 @@
-# Quests
+# Quests [![Build Status](http://ci.ac3-servers.eu/buildStatus/icon?job=Quests)](http://ci.ac3-servers.eu/job/Quests/)
 
 Quests plugin for Spigot. This work depends highly on code contributions!
+
+## Download
+
+Distributed exclusively through Spigot: https://www.spigotmc.org/resources/quests.3711/
 
 ## Usage
 
 Documentation can be found in the Wiki: https://github.com/FlyingPikachu/Quests/wiki
 
-## License
+## Localization
 
-Quests is licensed under All Rights Reserved. Permission received from Blackvein.
+Help translate Quests into your language: https://crowdin.com/project/translate-quests
